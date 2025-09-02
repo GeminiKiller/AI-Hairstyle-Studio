@@ -1,0 +1,7 @@
+{
+  "name": "AI Hairstyle Studio",
+  "description": "An application for hairstylists and customers to virtually try on different hairstyles by capturing or uploading a picture.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
