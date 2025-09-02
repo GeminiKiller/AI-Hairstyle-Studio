@@ -110,7 +110,7 @@ export const HAIRSTYLES: Hairstyle[] = [
     id: 'wolf_cut',
     name: 'Wolf Cut',
     previewImage: 'https://behindthechair.com/wp-content/uploads/2025/06/Photo-Credit-Instagram-via-@-chellsiedanielles-.png',
-    prompt: 'Give the person a trendy wolf cut hairstyle with lots of choppy, textured layers on top and longer hair in the back. The style should have a messy, voluminous feel. Maintain facial features.',
+    prompt: 'Give the person a trendy wolf cut hairstyle with lots of choppy, textured layers on top and longer hair in the back. The style should have a messy, voluminous feel. Maintain facial features and hair color.',
     gender: 'unisex',
   },
   {

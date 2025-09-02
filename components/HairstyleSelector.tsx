@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Hairstyle } from '../types';
 
@@ -24,7 +23,7 @@ const HairstyleSelector: React.FC<HairstyleSelectorProps> = ({ hairstyles, selec
           <img
             src={style.previewImage}
             alt={style.name}
-            className="w-full h-20 object-cover rounded-md mb-2"
+            className="w-full aspect-square object-cover rounded-md mb-2"
           />
           <p className={`text-center text-sm font-medium ${
             selectedHairstyle?.id === style.id ? 'text-indigo-600' : 'text-gray-700 group-hover:text-indigo-600'
