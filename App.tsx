@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { Hairstyle } from './types';
+import { Hairstyle, GenerationHistoryItem } from './types';
 import { HAIRSTYLES } from './constants';
 import { editImageWithHairstyle } from './services/geminiService';
 import Header from './components/Header';
@@ -9,6 +9,7 @@ import ImageDisplay from './components/ImageDisplay';
 import Loader from './components/Loader';
 import WebcamCapture from './components/WebcamCapture';
 import Footer from './components/Footer';
+import HistoryPanel from './components/HistoryPanel';
 
 type GenderFilter = 'all' | 'female' | 'male';
 
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
   const [genderFilter, setGenderFilter] = useState<GenderFilter>('all');
+  const [generationHistory, setGenerationHistory] = useState<GenerationHistoryItem[]>([]);
 
   const handleImageUpload = (imageDataUrl: string) => {
     setOriginalImage(imageDataUrl);
@@ -95,6 +97,12 @@ const App: React.FC = () => {
 
       if (resultImage) {
         setEditedImage(resultImage);
+        const newHistoryItem: GenerationHistoryItem = {
+          id: `history-${Date.now()}`,
+          generatedImage: resultImage,
+          hairstyle: selectedHairstyle,
+        };
+        setGenerationHistory(prevHistory => [newHistoryItem, ...prevHistory]);
       } else {
         setError('Could not generate the new hairstyle. The model may not have returned an image.');
       }
@@ -115,6 +123,16 @@ const App: React.FC = () => {
     setError(null);
     setShowWebcam(false);
     setGenderFilter('all');
+    setGenerationHistory([]);
+  };
+
+  const handleHistorySelect = (item: GenerationHistoryItem) => {
+    setEditedImage(item.generatedImage);
+    setSelectedHairstyle(item.hairstyle);
+  };
+  
+  const handleClearHistory = () => {
+    setGenerationHistory([]);
   };
 
   if (showWebcam) {
@@ -207,6 +225,16 @@ const App: React.FC = () => {
             />
           </div>
         </div>
+        {generationHistory.length > 0 && (
+          <div className="mt-8">
+            <HistoryPanel
+              history={generationHistory}
+              onSelect={handleHistorySelect}
+              currentImage={editedImage}
+              onClearHistory={handleClearHistory}
+            />
+          </div>
+        )}
       </main>
       <Footer />
     </div>
