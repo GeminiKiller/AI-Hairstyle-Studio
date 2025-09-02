@@ -155,4 +155,11 @@ export const HAIRSTYLES: Hairstyle[] = [
     prompt: 'Give the person a classic side part hairstyle. The hair should be neatly combed to one side, with a clean, defined part. Keep the background.',
     gender: 'male',
   },
+  {
+    id: 'bald_head',
+    name: 'Bald Head',
+    previewImage: 'https://www.shutterstock.com/image-photo/human-alopecia-hair-loss-adult-600nw-98846069.jpg',
+    prompt: 'Make the person in the image completely bald. Remove all hair from their head for a clean-shaven look. Keep their facial features and the background intact.',
+    gender: 'male',
+  },
 ];
