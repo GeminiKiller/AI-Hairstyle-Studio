@@ -35,8 +35,8 @@ export const editImageWithHairstyle = async (
     if (base64StyleImage) {
       const styleImagePart = fileToGenerativePart(base64StyleImage);
       parts.push(styleImagePart);
-      // A more forceful, specific prompt for multi-image requests to prevent cropping based on the reference image.
-      finalPrompt = `Your primary task is to maintain the exact dimensions and aspect ratio of the first image provided (the person). Do not crop or alter its composition. With that strict rule, ${hairstylePrompt}`;
+      // A more forceful, specific prompt to ignore the reference image's aspect ratio.
+      finalPrompt = `The first image is the person. The second image is a reference for the hairstyle ONLY. ${hairstylePrompt}. IMPORTANT: The output image MUST perfectly match the aspect ratio and dimensions of the FIRST image. IGNORE the aspect ratio and composition of the second (reference) image. Do NOT crop the final image.`;
     } else {
       // The original instruction for single-image requests.
       finalPrompt = `${hairstylePrompt} IMPORTANT: The output image must have the exact same aspect ratio as the original input image. Do not change the image dimensions.`;

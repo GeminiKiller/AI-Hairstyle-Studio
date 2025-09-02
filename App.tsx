@@ -78,7 +78,7 @@ const App: React.FC = () => {
     }
     setIsLoading(true);
     setError(null);
-    setEditedImage(null);
+    // Do NOT set editedImage to null here, to keep the previous result visible.
 
     try {
       let resultImage: string | null;
@@ -187,17 +187,24 @@ const App: React.FC = () => {
           </div>
 
           {/* Right Column: Display */}
-          <div className="lg:col-span-8 bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center justify-center min-h-[60vh]">
-            {isLoading && <Loader />}
-            {error && !isLoading && (
-              <div className="text-center text-red-500 bg-red-100 p-4 rounded-lg">
-                <p className="font-bold">Oops! Something went wrong.</p>
-                <p>{error}</p>
+          <div className="lg:col-span-8 bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center justify-center min-h-[60vh] relative">
+            {(isLoading || error) && (
+              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
+                {isLoading && <Loader />}
+                {error && !isLoading && (
+                  <div className="text-center text-red-500 bg-red-100 p-4 rounded-lg max-w-md">
+                    <p className="font-bold">Oops! Something went wrong.</p>
+                    <p>{error}</p>
+                  </div>
+                )}
               </div>
             )}
-            {!isLoading && !error && (
-              <ImageDisplay originalImage={originalImage} editedImage={editedImage} />
-            )}
+            <ImageDisplay 
+              originalImage={originalImage} 
+              editedImage={editedImage} 
+              onRegenerate={handleTryHairstyle}
+              isLoading={isLoading}
+            />
           </div>
         </div>
       </main>
