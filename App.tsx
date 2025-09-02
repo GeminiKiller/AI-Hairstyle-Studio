@@ -39,7 +39,7 @@ const App: React.FC = () => {
       id: `custom-${Date.now()}`, // Unique ID for each upload
       name: 'Your Style',
       previewImage: imageDataUrl,
-      prompt: "Apply the hairstyle from the second image (the style reference) to the person in the first image. Preserve the person's facial features and the original background. The only change should be the hairstyle.",
+      prompt: "apply the hairstyle from the second image (the style reference) to the person in the first image. Only change the hair. Preserve all other details like facial features and the background.",
       gender: 'unisex',
     };
     setCustomHairstyle(newCustomStyle); // Set the available custom style

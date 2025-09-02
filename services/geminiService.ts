@@ -29,17 +29,19 @@ export const editImageWithHairstyle = async (
 ): Promise<string | null> => {
   try {
     const userImagePart = fileToGenerativePart(base64ImageData);
-    // FIX: Add type `any[]` to allow both image and text parts in the array.
-    // TypeScript was inferring the type from the first element, causing an error
-    // when pushing an object with a different shape.
     const parts: any[] = [userImagePart];
+    let finalPrompt: string;
 
     if (base64StyleImage) {
       const styleImagePart = fileToGenerativePart(base64StyleImage);
       parts.push(styleImagePart);
+      // A more forceful, specific prompt for multi-image requests to prevent cropping based on the reference image.
+      finalPrompt = `Your primary task is to maintain the exact dimensions and aspect ratio of the first image provided (the person). Do not crop or alter its composition. With that strict rule, ${hairstylePrompt}`;
+    } else {
+      // The original instruction for single-image requests.
+      finalPrompt = `${hairstylePrompt} IMPORTANT: The output image must have the exact same aspect ratio as the original input image. Do not change the image dimensions.`;
     }
-    
-    const finalPrompt = `${hairstylePrompt} IMPORTANT: The output image must have the exact same aspect ratio as the original input image. Do not change the image dimensions.`;
+
     parts.push({ text: finalPrompt });
 
     const response = await ai.models.generateContent({

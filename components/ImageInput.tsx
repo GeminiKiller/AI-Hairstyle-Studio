@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 
 interface ImageInputProps {
@@ -40,28 +39,33 @@ const ImageInput: React.FC<ImageInputProps> = ({ onImageUpload, onWebcamOpen }) 
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        accept="image/png, image/jpeg"
-        className="hidden"
-      />
-      <button
-        onClick={handleUploadClick}
-        className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-all duration-300 text-gray-600 hover:text-indigo-600"
-      >
-        <UploadIcon className="w-8 h-8 mb-2"/>
-        <span className="font-semibold">Upload Image</span>
-      </button>
-      <button
-        onClick={onWebcamOpen}
-        className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all duration-300 text-gray-600 hover:text-green-600"
-      >
-        <CameraIcon className="w-8 h-8 mb-2"/>
-        <span className="font-semibold">Use Camera</span>
-      </button>
+    <div className="space-y-3">
+      <p className="text-sm text-center text-gray-500 px-1">
+        For best results, use a photo with a plain background.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/png, image/jpeg"
+          className="hidden"
+        />
+        <button
+          onClick={handleUploadClick}
+          className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition-all duration-300 text-gray-600 hover:text-indigo-600"
+        >
+          <UploadIcon className="w-8 h-8 mb-2"/>
+          <span className="font-semibold">Upload Image</span>
+        </button>
+        <button
+          onClick={onWebcamOpen}
+          className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all duration-300 text-gray-600 hover:text-green-600"
+        >
+          <CameraIcon className="w-8 h-8 mb-2"/>
+          <span className="font-semibold">Use Camera</span>
+        </button>
+      </div>
     </div>
   );
 };

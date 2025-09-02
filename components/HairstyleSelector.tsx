@@ -61,7 +61,9 @@ const HairstyleSelector: React.FC<HairstyleSelectorProps> = ({ hairstyles, selec
           <img
             src={style.previewImage}
             alt={style.name}
-            className="w-full aspect-square object-cover rounded-md mb-2"
+            className={`w-full aspect-square rounded-md mb-2 ${
+              style.id.startsWith('custom') ? 'object-contain bg-gray-100' : 'object-cover'
+            }`}
           />
           <p className={`text-center text-sm font-medium ${
             selectedHairstyle?.id === style.id ? 'text-indigo-600' : 'text-gray-700 group-hover:text-indigo-600'
