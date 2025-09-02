@@ -7,9 +7,6 @@ const Footer: React.FC = () => {
         <p className="text-sm text-gray-500">
           All hairstyle preview images are for demonstration purposes only. Credit for these images belongs to their original creators.
         </p>
-        <p className="text-sm text-gray-500">
-        Designed and created by Keng Fai
-        </p>
       </div>
     </footer>
   );

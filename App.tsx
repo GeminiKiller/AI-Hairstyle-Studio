@@ -16,6 +16,7 @@ const App: React.FC = () => {
   const [originalImage, setOriginalImage] = useState<string | null>(null);
   const [editedImage, setEditedImage] = useState<string | null>(null);
   const [selectedHairstyle, setSelectedHairstyle] = useState<Hairstyle | null>(null);
+  const [customHairstyle, setCustomHairstyle] = useState<Hairstyle | null>(null); // State for the uploaded style
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showWebcam, setShowWebcam] = useState<boolean>(false);
@@ -33,9 +34,22 @@ const App: React.FC = () => {
     setError(null);
   }, []);
 
+  const handleCustomHairstyleUpload = (imageDataUrl: string) => {
+    const newCustomStyle: Hairstyle = {
+      id: `custom-${Date.now()}`, // Unique ID for each upload
+      name: 'Your Style',
+      previewImage: imageDataUrl,
+      prompt: "Apply the hairstyle from the second image (the style reference) to the person in the first image. Preserve the person's facial features and the original background. The only change should be the hairstyle.",
+      gender: 'unisex',
+    };
+    setCustomHairstyle(newCustomStyle); // Set the available custom style
+    setSelectedHairstyle(newCustomStyle); // Also select it immediately
+    setError(null);
+  };
+  
   const handleFilterChange = (filter: GenderFilter) => {
-    // If the currently selected hairstyle is no longer visible, deselect it.
-    if (selectedHairstyle) {
+    // If a non-custom hairstyle is selected, check if it should be deselected
+    if (selectedHairstyle && !selectedHairstyle.id.startsWith('custom')) {
       const isVisible = filter === 'all' || selectedHairstyle.gender === filter || selectedHairstyle.gender === 'unisex';
       if (!isVisible) {
         setSelectedHairstyle(null);
@@ -44,14 +58,18 @@ const App: React.FC = () => {
     setGenderFilter(filter);
   };
 
-  const filteredHairstyles = useMemo(() => {
-    if (genderFilter === 'all') {
-      return HAIRSTYLES;
-    }
-    return HAIRSTYLES.filter(style => 
-      style.gender === genderFilter || style.gender === 'unisex'
+  const displayedHairstyles = useMemo(() => {
+    const baseStyles = HAIRSTYLES.filter(style => 
+      genderFilter === 'all' || style.gender === genderFilter || style.gender === 'unisex'
     );
-  }, [genderFilter]);
+    
+    // If a custom hairstyle has been uploaded, add it to the list
+    if (customHairstyle) {
+      return [customHairstyle, ...baseStyles];
+    }
+    
+    return baseStyles;
+  }, [genderFilter, customHairstyle]);
 
   const handleTryHairstyle = async () => {
     if (!originalImage || !selectedHairstyle) {
@@ -63,7 +81,18 @@ const App: React.FC = () => {
     setEditedImage(null);
 
     try {
-      const resultImage = await editImageWithHairstyle(originalImage, selectedHairstyle.prompt);
+      let resultImage: string | null;
+      // Check if the selected hairstyle is a custom one by its ID prefix
+      if (selectedHairstyle.id.startsWith('custom')) {
+         resultImage = await editImageWithHairstyle(
+          originalImage, 
+          selectedHairstyle.prompt, 
+          selectedHairstyle.previewImage // Pass reference image
+        );
+      } else {
+         resultImage = await editImageWithHairstyle(originalImage, selectedHairstyle.prompt);
+      }
+
       if (resultImage) {
         setEditedImage(resultImage);
       } else {
@@ -81,6 +110,7 @@ const App: React.FC = () => {
     setOriginalImage(null);
     setEditedImage(null);
     setSelectedHairstyle(null);
+    setCustomHairstyle(null); // Reset custom hairstyle
     setIsLoading(false);
     setError(null);
     setShowWebcam(false);
@@ -127,9 +157,10 @@ const App: React.FC = () => {
                 </div>
 
                 <HairstyleSelector 
-                  hairstyles={filteredHairstyles} 
+                  hairstyles={displayedHairstyles} 
                   selectedHairstyle={selectedHairstyle} 
-                  onSelect={handleHairstyleSelect} 
+                  onSelect={handleHairstyleSelect}
+                  onCustomUpload={handleCustomHairstyleUpload}
                 />
               </div>
 
